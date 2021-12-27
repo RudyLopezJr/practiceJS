@@ -1,2 +1,2 @@
 # Practice in JS
-Here I add my practice project in JavaScript
+Here I add my practice projects in JavaScript

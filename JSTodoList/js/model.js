@@ -2,16 +2,47 @@
 export default class Model{
     constructor(){
         this.view = null;
-        this.todos = [];
-        this.currentId = 1;
+        this.todos = JSON.parse(localStorage.getItem('todos'));
+        if(!this.todos || this.todos.length < 1){
+            this.todos = [
+                {
+                    id: 0,
+                    title: 'learn JS',
+                    description: 'Watch JS Tutorials',
+                    completed: false,
+                    
+                }
+            ]
+            this.currentId = 1;
+        }
+        else{
+            this.currentId = this.todos[this.todos.length - 1].id + 1;
+        }
+        
     }
 
     setView(view){
         this.view = view;
     }
 
+    save(){
+        localStorage.setItem('todos', JSON.stringify(this.todos));
+    }
+
     getTodos(){
         return this.todos;
+    }
+    
+    findTodo(id){
+        return this.todos.findIndex((todo) => todo.id === id);
+        
+    }
+
+    toggleCompleted(id){
+        const index = this.findTodo(id);
+        const todo = this.todos[index];
+        todo.completed = !todo.completed;
+        console.log(this.todos);
     }
 
     addTodo(title,description){
@@ -23,9 +54,18 @@ export default class Model{
         }
 
         this.todos.push(todo);
-        console.log(title,description);
+        console.log(this.todos);
+
+        this.save();
         //return Object.assign({},todo);
         return {...todo};
+    }
+
+    removeTodo(id){
+        const index = this.findTodo(id);
+        this.todos.splice(index,1);
+        this.save();
+        //console.log(this.todos[index]);
     }
 
 }
